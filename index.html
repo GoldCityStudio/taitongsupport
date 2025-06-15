@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Center</title>
+    <style>
+        :root {
+            --primary-color: #333;
+            --secondary-color: #555;
+            --background-color: #f9f9f9;
+            --text-color: #333;
+            --section-bg: #f9f9f9;
+            --hover-color: #e9ecef;
+            --border-color: #ddd;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #f0f0f0;
+            --secondary-color: #ccc;
+            --background-color: #1a1a1a;
+            --text-color: #f0f0f0;
+            --section-bg: #2d2d2d;
+            --hover-color: #3d3d3d;
+            --border-color: #444;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            color: var(--text-color);
+            text-align: center;
+            border-bottom: 2px solid var(--text-color);
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: var(--text-color);
+            margin-top: 30px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: var(--section-bg);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .section:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .contact-info {
+            background-color: var(--hover-color);
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            line-height: 1.8;
+        }
+
+        .contact-info h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-size: 1.2em;
+        }
+
+        .contact-info p {
+            margin: 8px 0;
+        }
+
+        .nav-menu {
+            background-color: var(--primary-color);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-menu ul {
+            display: flex;
+            gap: 20px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--section-bg);
+            color: var(--text-color);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2em;
+            padding: 5px;
+        }
+
+        .faq-item {
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .faq-item:hover {
+            background-color: var(--hover-color);
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 10px;
+            margin-top: 5px;
+            background-color: var(--section-bg);
+            border-radius: 5px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        form {
+            display: grid;
+            gap: 15px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--section-bg);
+            color: var(--text-color);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .loading.visible {
+            display: flex;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-menu ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .search-container {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .search-input {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            max-width: 200px;
+            height: auto;
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .header h1 {
+            margin: 0;
+            border: none;
+            font-size: 1.8em;
+        }
+
+        .park-name {
+            text-align: center;
+            margin: 0;
+        }
+
+        .park-name-chinese {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .park-name-english {
+            font-size: 1.2em;
+            color: var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                max-width: 150px;
+            }
+
+            .header-content {
+                gap: 2px;
+            }
+
+            .park-name-chinese {
+                font-size: 1.3em;
+            }
+
+            .park-name-english {
+                font-size: 1.1em;
+            }
+        }
+
+        .language-toggle {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1em;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+
+        .language-toggle:hover {
+            background-color: var(--secondary-color);
+        }
+
+        [lang="zh"] {
+            display: none;
+        }
+
+        [data-lang="zh"] [lang="zh"] {
+            display: block;
+        }
+
+        [data-lang="zh"] [lang="en"] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="header">
+        <img src="logo.png" alt="Company Logo" class="logo">
+        <div class="header-content">
+            <div class="park-name">
+                <div class="park-name-chinese">大棠有機生態園</div>
+                <div class="park-name-english">TAI TONG ECOPARK</div>
+            </div>
+            <h1>
+                <span lang="en">Support Center</span>
+                <span lang="zh">支援中心</span>
+            </h1>
+        </div>
+    </div>
+
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="#faq"><span lang="en">FAQ</span><span lang="zh">常見問題</span></a></li>
+            <li><a href="#contact"><span lang="en">Contact</span><span lang="zh">聯絡我們</span></a></li>
+            <li><a href="#support-ticket"><span lang="en">Support Ticket</span><span lang="zh">支援票</span></a></li>
+            <li><a href="#feedback"><span lang="en">Feedback</span><span lang="zh">意見回饋</span></a></li>
+        </ul>
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search FAQs..." data-placeholder-en="Search FAQs..." data-placeholder-zh="搜尋常見問題...">
+            <button class="theme-toggle" title="Toggle Dark Mode">🌓</button>
+            <button class="language-toggle" title="Switch Language">中/En</button>
+        </div>
+    </nav>
+
+    <div id="faq" class="section">
+        <h2>
+            <span lang="en">Frequently Asked Questions</span>
+            <span lang="zh">常見問題</span>
+        </h2>
+        
+        <h3>
+            <span lang="en">Tickets & Passes</span>
+            <span lang="zh">門票及通行證</span>
+        </h3>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">How do I purchase tickets?</span>
+                <span lang="zh">如何購買門票？</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">You can purchase tickets through our website, mobile app, or at the park entrance. Online purchases are recommended for the best rates and to avoid long lines.</span>
+                <span lang="zh">您可以通過我們的網站、手機應用程式或在公園入口處購買門票。建議在網上購買，以獲得最佳價格並避免排長隊。</span>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">Can I transfer my ticket to someone else?</span>
+                <span lang="zh">我可以將門票轉讓給他人嗎？</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">Yes, tickets can be transferred through your account settings. Please note that some restrictions may apply based on the ticket type.</span>
+                <span lang="zh">是的，您可以通過帳戶設置轉讓門票。請注意，根據門票類型可能會有某些限制。</span>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">What happens if I lose my ticket?</span>
+                <span lang="zh">如果我遺失門票怎麼辦？</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">If you lose your ticket, please contact our customer service immediately. We can help you recover your ticket or issue a new one.</span>
+                <span lang="zh">如果您遺失門票，請立即聯繫我們的客戶服務。我們可以幫助您找回門票或發放新門票。</span>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">How do I upgrade my pass?</span>
+                <span lang="zh">如何升級我的通行證？</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">You can upgrade your pass through your account settings. If you need assistance, please contact our customer service.</span>
+                <span lang="zh">您可以通過帳戶設置升級您的通行證。如果您需要幫助，請聯繫我們的客戶服務。</span>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">What are the different types of passes available?</span>
+                <span lang="zh">有哪些不同的通行證可供選擇？</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">We offer various types of passes including single-day, multi-day, and annual passes. You can choose the one that best suits your needs.</span>
+                <span lang="zh">我們提供各種類型的通行證，包括單日通行證、多日通行證和年度通行證。您可以選擇最適合您需求的通行證。</span>
+            </div>
+        </div>
+
+        <h3>
+            <span lang="en">App Features</span>
+            <span lang="zh">應用程式功能</span>
+        </h3>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">How do I use the QR code scanner?</span>
+                <span lang="zh">如何使用二維碼掃描器？</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">Open the app and tap the QR code icon in the main menu. Point your camera at any QR code within the park to access information or make purchases.</span>
+                <span lang="zh">打開應用程式並點擊主選單中的二維碼圖標。將相機對準公園內的任何二維碼，即可獲取資訊或進行購買。</span>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">How do I track my rewards points?</span>
+                <span lang="zh">如何追蹤我的獎勵積分？</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">You can track your rewards points by logging into your account and navigating to the rewards section. Each purchase or activity within the park will earn you points.</span>
+                <span lang="zh">您可以通過登入帳戶並導航至獎勵部分來追蹤您的獎勵積分。在公園內的每次購買或活動都會為您賺取積分。</span>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">How do I share my referral code?</span>
+                <span lang="zh">如何分享我的推薦碼？</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">You can share your referral code by logging into your account and navigating to the referral section. You can then copy the code and share it with your friends.</span>
+                <span lang="zh">您可以通過登入帳戶並導航至推薦部分來分享您的推薦碼。然後您可以複製代碼並與朋友分享。</span>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">How do I view my purchase history?</span>
+                <span lang="zh">如何查看我的購買歷史？</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">You can view your purchase history by logging into your account and navigating to the purchase history section. You can also receive a copy of your purchase history via email.</span>
+                <span lang="zh">您可以通過登入帳戶並導航至購買歷史部分來查看您的購買歷史。您也可以通過電郵接收購買歷史的副本。</span>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">How do I update my profile information?</span>
+                <span lang="zh">如何更新我的個人資料？</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">You can update your profile information by logging into your account and navigating to the profile section. You can then make any necessary changes to your personal information.</span>
+                <span lang="zh">您可以通過登入帳戶並導航至個人資料部分來更新您的個人資料。然後您可以對個人資料進行必要的更改。</span>
+            </div>
+        </div>
+
+        <h3>
+            <span lang="en">Technical Support</span>
+            <span lang="zh">技術支援</span>
+        </h3>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">The app is not loading properly</span>
+                <span lang="zh">應用程式無法正常載入</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">Please try restarting the app or checking your internet connection. If the issue persists, please contact our customer service.</span>
+                <span lang="zh">請嘗試重新啟動應用程式或檢查您的網絡連接。如果問題仍然存在，請聯繫我們的客戶服務。</span>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">I can't log in to my account</span>
+                <span lang="zh">我無法登入帳戶</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">Please check your email and password and try again. If you continue to experience issues, please contact our customer service.</span>
+                <span lang="zh">請檢查您的電郵和密碼後重試。如果您仍然遇到問題，請聯繫我們的客戶服務。</span>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">My QR code is not scanning</span>
+                <span lang="zh">我的二維碼掃描器無法正常運作</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">Please ensure that your camera is clean and that the QR code is visible. If the issue persists, please contact our customer service.</span>
+                <span lang="zh">請確保您的相機清潔並且二維碼清晰可見。如果問題仍然存在，請聯繫我們的客戶服務。</span>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">The app keeps crashing</span>
+                <span lang="zh">應用程式不斷崩潰</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">Please try restarting the app or checking for updates. If the issue persists, please contact our customer service.</span>
+                <span lang="zh">請嘗試重新啟動應用程式或檢查更新。如果問題仍然存在，請聯繫我們的客戶服務。</span>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">I'm not receiving notifications</span>
+                <span lang="zh">我沒有收到通知</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">Please check your device settings to ensure that notifications are enabled. If you continue to experience issues, please contact our customer service.</span>
+                <span lang="zh">請檢查您的設備設置以確保通知已啟用。如果您仍然遇到問題，請聯繫我們的客戶服務。</span>
+            </div>
+        </div>
+
+        <h3>
+            <span lang="en">Account Management</span>
+            <span lang="zh">帳戶管理</span>
+        </h3>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">How do I reset my password?</span>
+                <span lang="zh">如何重設密碼？</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">You can reset your password by clicking on the "Forgot Password" link on the login page. Follow the instructions to reset your password.</span>
+                <span lang="zh">您可以通過點擊登入頁面上的「忘記密碼」連結來重設密碼。按照指示重設您的密碼。</span>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">How do I update my email address?</span>
+                <span lang="zh">如何更新我的電郵地址？</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">You can update your email address by logging into your account and navigating to the profile section. You can then make any necessary changes to your email address.</span>
+                <span lang="zh">您可以通過登入帳戶並導航至個人資料部分來更新您的電郵地址。然後您可以對電郵地址進行必要的更改。</span>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">How do I delete my account?</span>
+                <span lang="zh">如何刪除我的帳戶？</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">You can delete your account by logging into your account and navigating to the account settings section. You can then follow the instructions to delete your account.</span>
+                <span lang="zh">您可以通過登入帳戶並導航至帳戶設置部分來刪除您的帳戶。然後您可以按照指示刪除帳戶。</span>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">How do I change my notification preferences?</span>
+                <span lang="zh">如何更改我的通知偏好？</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">You can change your notification preferences by logging into your account and navigating to the notification settings section. You can then make any necessary changes to your notification preferences.</span>
+                <span lang="zh">您可以通過登入帳戶並導航至通知設置部分來更改您的通知偏好。然後您可以對通知偏好進行必要的更改。</span>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span lang="en">How do I manage my privacy settings?</span>
+                <span lang="zh">如何管理我的私隱設置？</span>
+            </div>
+            <div class="faq-answer">
+                <span lang="en">You can manage your privacy settings by logging into your account and navigating to the privacy settings section. You can then make any necessary changes to your privacy settings.</span>
+                <span lang="zh">您可以通過登入帳戶並導航至私隱設置部分來管理您的私隱設置。然後您可以對私隱設置進行必要的更改。</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="contact" class="section">
+        <h2>
+            <span lang="en">Contact Us</span>
+            <span lang="zh">聯絡我們</span>
+        </h2>
+        
+        <div class="contact-info">
+            <h3>
+                <span lang="en">Office Postal Address</span>
+                <span lang="zh">通訊地址</span>
+            </h3>
+            <p>
+                <span lang="zh">香港新界元朗大棠山道十一號</span><br>
+                <span lang="en">No.11, Tai Tong Shan Road, Yuen Long, N.T. Hong Kong</span>
+            </p>
+        </div>
+
+        <div class="contact-info">
+            <h3>
+                <span lang="en">TAI TONG ORGANIC ECOPARK</span>
+                <span lang="zh">生態園</span>
+            </h3>
+            <p>
+                <span lang="zh">電話：</span>
+                <span lang="en">Tel: </span>
+                +852 24702201
+                <span lang="zh">(團體查詢)</span>
+                <span lang="en">(Group Enquiry)</span>
+                / 24702255
+                <span lang="zh">(一般查詢)</span>
+                <span lang="en">(General Enquiry)</span>
+                / 24733818
+                <span lang="zh">(辦公室)</span>
+                <span lang="en">(Office)</span>
+            </p>
+            <p>
+                <span lang="zh">傳真：</span>
+                <span lang="en">Fax: </span>
+                +852 24703662 / 24743255
+            </p>
+            <p>
+                <span lang="zh">資料查詢 | </span>
+                <span lang="en">General Information: </span>
+                info@ttlv.hk
+            </p>
+            <p>
+                <span lang="zh">預約查詢 | </span>
+                <span lang="en">Booking Enquiry: </span>
+                booking@ttlv.hk
+            </p>
+        </div>
+
+        <div class="contact-info">
+            <h3>
+                <span lang="en">TAI TONG RIDING CLUB & HORSE STABLE</span>
+                <span lang="zh">馬房</span>
+            </h3>
+            <p>
+                <span lang="zh">電話：</span>
+                <span lang="en">Tel: </span>
+                +852 24703638
+            </p>
+            <p>
+                <span lang="zh">傳真：</span>
+                <span lang="en">Fax: </span>
+                +852 24703622
+            </p>
+            <p>
+                <span lang="zh">資料查詢 | </span>
+                <span lang="en">General Information: </span>
+                kylie@ttlv.hk
+            </p>
+        </div>
+
+        <div class="contact-info">
+            <h3>
+                <span lang="en">TAI TONG ORGANIC VALLEY</span>
+                <span lang="zh">有機園</span>
+            </h3>
+            <p>
+                <span lang="zh">電話：</span>
+                <span lang="en">Tel: </span>
+                +852 24702027
+                <span lang="zh">(有機產品訂購查詢)</span>
+                <span lang="en">(Organic Product Order Enquiry)</span>
+                / 2470 2066
+                <span lang="zh">(有機芽菜銷售查詢)</span>
+                <span lang="en">(Organic Sprout Sales Enquiry)</span>
+            </p>
+            <p>
+                <span lang="zh">傳真：</span>
+                <span lang="en">Fax: </span>
+                +852 24703662
+            </p>
+            <p>
+                <span lang="zh">資料查詢 | </span>
+                <span lang="en">General Information: </span>
+                info@ttlv.hk
+            </p>
+            <p>
+                <span lang="zh">預約查詢 | </span>
+                <span lang="en">Booking Enquiry: </span>
+                activity@ttlv.hk
+            </p>
+        </div>
+    </div>
+
+    <div id="support-ticket" class="section">
+        <h2>
+            <span lang="en">Submit a Support Ticket</span>
+            <span lang="zh">提交支援票</span>
+        </h2>
+        <div class="submit-form">
+            <form id="supportForm">
+                <div>
+                    <label for="name">
+                        <span lang="en">Your Name:</span>
+                        <span lang="zh">您的姓名：</span>
+                    </label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div>
+                    <label for="email">
+                        <span lang="en">Email Address:</span>
+                        <span lang="zh">電郵地址：</span>
+                    </label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div>
+                    <label for="phone">
+                        <span lang="en">Phone Number:</span>
+                        <span lang="zh">電話號碼：</span>
+                    </label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+                <div>
+                    <label for="ticket">
+                        <span lang="en">Ticket/Pass Number (if applicable):</span>
+                        <span lang="zh">門票/通行證號碼（如適用）：</span>
+                    </label>
+                    <input type="text" id="ticket" name="ticket">
+                </div>
+                <div>
+                    <label for="issue">
+                        <span lang="en">Description of Issue:</span>
+                        <span lang="zh">問題描述：</span>
+                    </label>
+                    <textarea id="issue" name="issue" rows="5" required></textarea>
+                </div>
+                <div>
+                    <label for="attachment">
+                        <span lang="en">Attachments:</span>
+                        <span lang="zh">附件：</span>
+                    </label>
+                    <input type="file" id="attachment" name="attachment" multiple>
+                </div>
+                <button type="submit">
+                    <span lang="en">Submit Ticket</span>
+                    <span lang="zh">提交票據</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="feedback" class="section">
+        <h2>
+            <span lang="en">Feedback</span>
+            <span lang="zh">意見回饋</span>
+        </h2>
+        <form id="feedbackForm">
+            <div>
+                <label for="feedbackType">
+                    <span lang="en">Feedback Type:</span>
+                    <span lang="zh">回饋類型：</span>
+                </label>
+                <select id="feedbackType" name="feedbackType" required>
+                    <option value="">
+                        <span lang="en">Select a category</span>
+                        <span lang="zh">選擇類別</span>
+                    </option>
+                    <option value="features">
+                        <span lang="en">New Features</span>
+                        <span lang="zh">新功能</span>
+                    </option>
+                    <option value="improvement">
+                        <span lang="en">App Improvement</span>
+                        <span lang="zh">應用程式改進</span>
+                    </option>
+                    <option value="service">
+                        <span lang="en">Customer Service</span>
+                        <span lang="zh">客戶服務</span>
+                    </option>
+                    <option value="other">
+                        <span lang="en">Other</span>
+                        <span lang="zh">其他</span>
+                    </option>
+                </select>
+            </div>
+            <div>
+                <label for="feedbackText">
+                    <span lang="en">Your Feedback:</span>
+                    <span lang="zh">您的回饋：</span>
+                </label>
+                <textarea id="feedbackText" name="feedbackText" rows="5" required></textarea>
+            </div>
+            <button type="submit">
+                <span lang="en">Submit Feedback</span>
+                <span lang="zh">提交回饋</span>
+            </button>
+        </form>
+    </div>
+
+    <div class="back-to-top" title="Back to Top">↑</div>
+
+    <script>
+        // FAQ Toggle functionality
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // Form submission handling
+        document.getElementById('supportForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const currentLang = document.body.dataset.lang || 'en';
+            alert(currentLang === 'en' ? 'Support ticket submitted successfully!' : '支援票提交成功！');
+        });
+
+        document.getElementById('feedbackForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const currentLang = document.body.dataset.lang || 'en';
+            alert(currentLang === 'en' ? 'Feedback submitted successfully!' : '回饋提交成功！');
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.nav-menu a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = document.querySelector(this.getAttribute('href'));
+                section.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Language toggle functionality
+        const languageToggle = document.querySelector('.language-toggle');
+        const searchInput = document.querySelector('.search-input');
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        languageToggle.addEventListener('click', () => {
+            const currentLang = document.body.dataset.lang || 'en';
+            const newLang = currentLang === 'en' ? 'zh' : 'en';
+            document.body.dataset.lang = newLang;
+            
+            // Update search placeholder
+            searchInput.placeholder = searchInput.dataset[`placeholder${newLang === 'en' ? 'En' : 'Zh'}`];
+            
+            // Save language preference
+            localStorage.setItem('language', newLang);
+        });
+
+        // Load saved language preference
+        const savedLang = localStorage.getItem('language');
+        if (savedLang) {
+            document.body.dataset.lang = savedLang;
+            searchInput.placeholder = searchInput.dataset[`placeholder${savedLang === 'en' ? 'En' : 'Zh'}`];
+        }
+
+        // Search functionality
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const currentLang = document.body.dataset.lang || 'en';
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector(`.faq-question [lang="${currentLang}"]`).textContent.toLowerCase();
+                const answer = item.querySelector(`.faq-answer [lang="${currentLang}"]`).textContent.toLowerCase();
+                const isVisible = question.includes(searchTerm) || answer.includes(searchTerm);
+                item.style.display = isVisible ? 'block' : 'none';
+            });
+        });
+
+        // Back to Top button
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 100) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Dark mode toggle
+        const themeToggle = document.querySelector('.theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('theme', document.body.dataset.theme);
+        });
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.body.dataset.theme = savedTheme;
+        }
+
+        // Loading animation
+        const loading = document.querySelector('.loading');
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', () => {
+                loading.classList.add('visible');
+                setTimeout(() => {
+                    loading.classList.remove('visible');
+                }, 1000);
+            });
+        });
+
+        // Add form validation messages
+        const formInputs = document.querySelectorAll('input[required], textarea[required]');
+        formInputs.forEach(input => {
+            input.addEventListener('invalid', (e) => {
+                const currentLang = document.body.dataset.lang || 'en';
+                if (currentLang === 'en') {
+                    input.setCustomValidity('This field is required');
+                } else {
+                    input.setCustomValidity('此欄位為必填');
+                }
+            });
+            input.addEventListener('input', (e) => {
+                input.setCustomValidity('');
+            });
+        });
+    </script>
+</body>
+</html> 
